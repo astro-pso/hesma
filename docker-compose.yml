@@ -1,0 +1,105 @@
+# Backend services needed for development.
+#
+# This file will start all the backend services needed to run InvenioRDM
+# locally in development mode.
+#
+# Usage::
+#
+#   $ docker compose up -d
+#
+# Following services are included:
+# - Cache: Redis (exposed port: 6379)
+# - DB: (PostgresSQL/MySQL) (exposed port: 5432 or 3306)
+# - Message queue: RabbitMQ (exposed ports: 5672, 15672)
+# - OpenSearch (exposed ports: 9200, 9600)
+# - Kibana (view ES indexes) (exposed ports: 5601)
+#
+services:
+  cache:
+    image: redis:7
+    restart: unless-stopped
+    networks: [invenio]
+
+  mq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    networks: [invenio]
+
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks: [invenio]
+
+  search:
+    image: opensearchproject/opensearch:2
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    volumes:
+      - search-data:/usr/share/opensearch/data
+    networks: [invenio]
+
+  web-ui:
+    image: hesma
+    restart: unless-stopped
+    command: ["uwsgi --uid invenio --gid www-data /opt/invenio/var/instance/uwsgi_ui.ini"]
+    env_file: .env
+    volumes:
+      - /var/www/hesma_data:/opt/invenio/var/instance/data
+    depends_on: [db, search, cache, mq]
+    networks: [invenio]
+
+  web-api:
+    image: hesma
+    restart: unless-stopped
+    command: ["uwsgi --uid invenio --gid www-data /opt/invenio/var/instance/uwsgi_rest.ini"]
+    env_file: .env
+    volumes:
+      - /var/www/hesma_data:/opt/invenio/var/instance/data
+    depends_on: [db, search, cache, mq]
+    networks: [invenio]
+
+  worker:
+    image: hesma
+    restart: unless-stopped
+    command: ["celery -A invenio_app.celery worker -l INFO"]
+    env_file: .env
+    volumes:
+      - /var/www/hesma_data:/opt/invenio/var/instance/data
+    depends_on: [db, search, cache, mq]
+    networks: [invenio]
+
+  beat:
+    image: hesma
+    restart: unless-stopped
+    command: ["celery -A invenio_app.celery beat -l INFO"]
+    env_file: .env
+    depends_on: [db, search, cache, mq]
+    networks: [invenio]
+
+  frontend:
+    image: nginx:1.25
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+      - ./robots.txt:/etc/nginx/html/robots.txt:ro
+    depends_on: [web-ui, web-api]
+    networks: [invenio]
+
+networks:
+  invenio:
+
+volumes:
+  db-data:
+  search-data:
