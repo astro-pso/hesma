@@ -1,2 +1,31 @@
-{# templates/semantic-ui/invenio_app_rdm/footer.html #}
-{# templates/semantic-ui/invenio_app_rdm/footer.html #}
+{%- block footer_top %}
+  <div class="footer-top hesma-footer-top">
+    <div class="ui container app-rdm-footer">
+      <div class="ui stackable grid app-rdm-footer">
+        <div class="rdm-footer six wide computer eight wide tablet column">
+          <h2 class="ui small header">HESMA</h2>
+          <p>Heidelberg Supernova Model Archive</p>
+          <p>Simulation data for supernova, common-envelope, and white dwarf merger research.</p>
+        </div>
+
+        <div class="rdm-footer four wide computer eight wide tablet column">
+          <h2 class="ui small header">Archive</h2>
+          <p><a href="{{ url_for('invenio_search_ui.search') }}">Records</a></p>
+          <p><a href="{{ url_for('invenio_app_rdm.help_search') }}">Search help</a></p>
+          <p><a href="{{ url_for('invenio_app_rdm.help_statistics') }}">Statistics help</a></p>
+        </div>
+
+        <div class="rdm-footer three wide computer eight wide tablet column">
+          <h2 class="ui small header">Policies</h2>
+          <p><a href="{{ url_for('invenio_app_rdm.legalnotice') }}">Legal Notice</a></p>
+          <p><a href="{{ url_for('invenio_app_rdm.privacy') }}">Privacy Policy</a></p>
+        </div>
+
+        <div class="rdm-footer three wide computer eight wide tablet column hesma-footer-support">
+          <h2 class="ui small header">Supported by</h2>
+          <img class="hesma-footer-logo" src="{{ url_for('hesma.static', filename='images/hits_logo.png') }}" alt="HITS"/>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endblock footer_top %}
