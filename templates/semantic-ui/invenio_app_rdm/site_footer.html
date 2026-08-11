@@ -1,30 +1,22 @@
-{#
-  Custom HESMA footer.
-  Included directly by invenio_app_rdm/page.html via THEME_FOOTER_TEMPLATE
-  — no extends needed, this is a plain snippet.
-#}
-
-{% block footer_top %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hesma-landing.css') }}" />
-
-<div class="hesma-footer">
-  <div class="hesma-footer-line"></div>
-  <div class="hesma-footer-menu">
-    <div class="hesma-footer-sep">
-      {# TODO: these are placeholders — point them at real pages once you
-         have them (e.g. via the invenio-pages module, or a static route). #}
-      <a href="{{ url_for('invenio_app_rdm.legalnotice') }}" class="hesma-footer-link">Legal Notice</a> |
-      <a href="{{ url_for('invenio_app_rdm.privacy') }}" class="hesma-footer-link">Privacy Policy</a>
-    </div>
-    <div class="hesma-footer-sep">&copy; 2026 HESMA</div>
-    <div class="hesma-footer-sep">
-      <br/>
-      Supported by:
-      <br/>
-      <img class="hesma-footer-logo" src="{{ url_for('static', filename='images/hits_logo.png') }}" alt="HITS"/>
+<div class="footer-bottom sub-footer hesma-sub-footer">
+  <div class="ui container">
+    <div class="ui stackable grid">
+      <div class="eight wide computer sixteen wide tablet column left middle aligned">
+        &copy; 2026 HESMA
+        <span class="hesma-footer-divider">|</span>
+        {{ _("Powered by") }}
+        <a href="http://inveniosoftware.org/products/rdm">InvenioRDM</a>
+      </div>
+      <div class="eight wide computer sixteen wide tablet column right aligned hesma-footer-links">
+        <a href="{{ url_for('invenio_app_rdm.legalnotice') }}">Legal Notice</a>
+        <span class="hesma-footer-divider">|</span>
+        <a href="{{ url_for('invenio_app_rdm.privacy') }}">Privacy Policy</a>
+        {%- if config.I18N_LANGUAGES %}
+          <span class="hesma-footer-divider">|</span>
+          {% from "invenio_i18n/macros/language_selector.html" import language_selector_dropdown %}
+          {{ language_selector_dropdown() }}
+        {%- endif %}
+      </div>
     </div>
   </div>
 </div>
-{% endblock footer_top %}
-
-{% block footer_bottom %}{% endblock footer_bottom %}

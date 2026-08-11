@@ -1,62 +1,76 @@
 {#
   Custom HESMA frontpage.
-  Extends the standard RDM page shell (keeps the working header/nav/login),
-  and only replaces the main body content.
+  Extends the configured HESMA page shell so the same stylesheet and footer
+  treatment are used across the InvenioRDM site.
 #}
-{%- extends "invenio_app_rdm/page.html" -%}
+{%- extends config.THEME_BASE_TEMPLATE -%}
 {% from "invenio_app_rdm/macros/records_list.html" import records_list %}
 
 {%- block page_body %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hesma-landing.css') }}" />
-
-  <section class="hesma-hero">
-    <div class="hesma-hero-content">
-      <h1 class="hesma-brand">HESMA</h1>
-      <h2 class="hesma-subtitle">
-        <span class="hesma-accent">HE</span>idelberg
-        <span class="hesma-accent">S</span>upernova
-        <span class="hesma-accent">M</span>odel
-        <span class="hesma-accent">A</span>rchive
-      </h2>
-
-      <p class="hesma-text">
-        The Heidelberg Supernova Model Archive is a database collecting various data
-        from supernova, common envelope, and white dwarf merger simulations. Here
-        you can find simulation snapshots, post-processed data, initial conditions
-        and more. We provide data from hydrodynamical simulations,
-        tracer-particle data for nuclear post-processing, and radiative-transfer
-        simulations.
+  <section class="hesma-frontpage-hero" aria-labelledby="hesma-intro-title">
+    <div class="ui container">
+      <p class="hesma-eyebrow">Heidelberg Supernova Model Archive</p>
+      <h1 id="hesma-intro-title" class="hesma-title">HESMA</h1>
+      <p class="hesma-lead">
+        A searchable archive for model data from supernova, common-envelope,
+        and white dwarf merger simulations.
       </p>
+      <div class="ui labels hesma-topic-labels" aria-label="Archive contents">
+        <span class="ui label">Simulation snapshots</span>
+        <span class="ui label">Initial conditions</span>
+        <span class="ui label">Tracer-particle data</span>
+        <span class="ui label">Radiative transfer</span>
+      </div>
+    </div>
+  </section>
 
-      <p class="hesma-text">
-        If you want to make your own simulations available through this archive,
-        please <a href="mailto:hesma@h-its.org">contact us</a>
-        and we will provide you with the means to upload your data to HESMA.
-      </p>
+  <section class="hesma-overview">
+    <div class="ui stackable grid container">
+      <div class="ten wide computer sixteen wide tablet column">
+        <h2 class="ui dividing header">About the Archive</h2>
+        <p>
+          HESMA collects simulation snapshots, post-processed data products,
+          initial conditions, tracer-particle data for nuclear post-processing,
+          and radiative-transfer outputs.
+        </p>
+        <p>
+          The archive supports reuse, comparison, and publication workflows for
+          computational astrophysics research.
+        </p>
+      </div>
 
-      <p class="hesma-text">
-        If you make use of the data provided through this website in publications,
-        please cite the original authors
-        (<a href="https://arxiv.org/abs/1706.09879" target="_blank" rel="noopener">arXiv:1706.09879</a>)
-        and add the following acknowledgement: &ldquo;This work made use of the
-        Heidelberg Supernova Model Archive (HESMA),
-        <a href="https://hesma.h-its.org">https://hesma.h-its.org</a>.&rdquo;
-      </p>
+      <aside class="six wide computer sixteen wide tablet column">
+        <div class="ui segment hesma-citation">
+          <h2 class="ui small header">Citation</h2>
+          <p>
+            Please cite the original authors
+            (<a href="https://arxiv.org/abs/1706.09879" target="_blank" rel="noopener">arXiv:1706.09879</a>)
+            and acknowledge the Heidelberg Supernova Model Archive.
+          </p>
+          <p class="hesma-quote">
+            This work made use of the Heidelberg Supernova Model Archive
+            (HESMA), https://hesma.h-its.org.
+          </p>
+        </div>
+      </aside>
     </div>
   </section>
 
   {%- block grid_section %}
-    <div class="ui stackable grid container rel-mt-2">
-
-      {% block main_column %}
-        <div class="eleven wide computer sixteen wide tablet column">
-
-          {% block main_column_content %}
-            {{ records_list() }}
-          {% endblock main_column_content %}
-
+    <section class="hesma-records">
+      <div class="ui stackable grid container">
+        <div class="sixteen wide column hesma-section-heading">
+          <h2 class="ui dividing header">Records</h2>
         </div>
-      {% endblock main_column %}
-    </div>
+
+        {% block main_column %}
+          <div class="sixteen wide column">
+            {% block main_column_content %}
+              {{ records_list() }}
+            {% endblock main_column_content %}
+          </div>
+        {% endblock main_column %}
+      </div>
+    </section>
   {%- endblock grid_section %}
 {%- endblock page_body %}
