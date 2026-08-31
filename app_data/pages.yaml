@@ -1,9 +1,0 @@
-- url: /legalnotice
-  title: Legal Notice
-  description: Legal Notice
-  template: legalnotice.html
-
-- url: /privacy
-  title: Privacy Policy
-  description: Privacy Policy
-  template: privacy.html

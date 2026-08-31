@@ -8,9 +8,9 @@
         <a href="http://inveniosoftware.org/products/rdm">InvenioRDM</a>
       </div>
       <div class="eight wide computer sixteen wide tablet column right aligned hesma-footer-links">
-        <a href="{{ url_for('invenio_app_rdm.legalnotice') }}">Legal Notice</a>
+        <a href="{{ url_for('hesma.legal_notice') }}">Legal Notice</a>
         <span class="hesma-footer-divider">|</span>
-        <a href="{{ url_for('invenio_app_rdm.privacy') }}">Privacy Policy</a>
+        <a href="{{ url_for('hesma.privacy_policy') }}">Privacy Policy</a>
         {%- if config.I18N_LANGUAGES %}
           <span class="hesma-footer-divider">|</span>
           {% from "invenio_i18n/macros/language_selector.html" import language_selector_dropdown %}
